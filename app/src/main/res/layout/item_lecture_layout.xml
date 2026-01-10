@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@drawable/lecture_card_bg"
+    android:layout_marginVertical="4dp">
+
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10:00 - 11:30"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#333"/>
+
+
+    <TextView
+        android:id="@+id/tv_subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="მათემატიკა"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#000"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp">
+
+        <TextView
+            android:id="@+id/tv_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Auditorium 201"
+            android:textSize="12sp"
+            android:textColor="#555"/>
+
+        <TextView
+            android:id="@+id/tv_lecturer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - მიხეილ გურული"
+            android:textSize="12sp"
+            android:textColor="#555"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+</LinearLayout>

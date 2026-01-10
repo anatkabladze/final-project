@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">StudyFlow</string>
+    <string name="schedule">Schedule</string>
+    <string name="search">Search</string>
+    <string name="add">Add</string>
+    <string name="tasks">Tasks</string>
+</resources>
