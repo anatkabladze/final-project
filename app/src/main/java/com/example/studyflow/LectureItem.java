@@ -26,8 +26,17 @@ public class LectureItem {
         this.notifyEnabled = notifyEnabled;
     }
 
-    public LectureItem(int anInt, String string, String string1, String string2, String string3, String string4, int anInt1) {
+    public LectureItem(int id, String subject, String startTime, String endTime,
+                       String room, String teacher, int dayOfWeek) {
+        this.id = id;
+        this.subject = subject;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.room = room;
+        this.teacher = teacher;
+        this.dayOfWeek = dayOfWeek;
     }
+
 
     // Getters
     public int getId() { return id; }

@@ -1,8 +1,10 @@
 package com.example.studyflow;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.LectureViewHolder> {
-
     private List<LectureItem> lectureList;
 
     public LectureAdapter(List<LectureItem> lectureList) {
@@ -30,21 +31,50 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.LectureV
     public void onBindViewHolder(@NonNull LectureViewHolder holder, int position) {
         LectureItem lecture = lectureList.get(position);
 
-
-        holder.tv_time.setText(
-                lecture.getStartTime() + " - " + lecture.getEndTime()
-        );
-
-
+        holder.tv_time.setText(lecture.getStartTime() + " - " + lecture.getEndTime());
         holder.tv_subject.setText(lecture.getSubject());
-
-
         holder.tv_room.setText(lecture.getRoom());
-
         holder.tv_lecturer.setText(lecture.getTeacher());
-    }
 
+        holder.iv_edit.setOnClickListener(v -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("lectureId", lecture.getId());
+                    bundle.putString("subject", lecture.getSubject());
+                    bundle.putString("start", lecture.getStartTime());
+                    bundle.putString("end", lecture.getEndTime());
+                    bundle.putString("room", lecture.getRoom());
+                    bundle.putString("teacher", lecture.getTeacher());
+                    bundle.putInt("day", lecture.getDayOfWeek());
+
+                    AddEditLectureFragment fragment = new AddEditLectureFragment();
+                    fragment.setArguments(bundle);
+
+                    ((MainActivity) v.getContext()).getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                      });
+
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    new androidx.appcompat.app.AlertDialog.Builder(v.getContext())
+                            .setTitle("წაშლა")
+                            .setMessage("დარწმუნებული ხართ რომ გინდათ წაშლა?")
+                            .setPositiveButton("დიახ", (dialog, which) -> {
+                                DB db = new DB(v.getContext(), "studyflow.db", null, 1);
+                                db.deleteLecture(lecture.getId());
+                                ((MainActivity) v.getContext()).reloadSchedule();
+                            })
+                            .setNegativeButton("არა", null)
+                            .show();
+                    return true;
+                }
+            });
+        }
     @Override
+
     public int getItemCount() {
         return lectureList.size();
     }
@@ -52,13 +82,14 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.LectureV
     static class LectureViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_time, tv_subject, tv_room, tv_lecturer;
-
+        ImageView iv_edit;
         public LectureViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_time = itemView.findViewById(R.id.tv_time);
             tv_subject = itemView.findViewById(R.id.tv_subject);
             tv_room = itemView.findViewById(R.id.tv_room);
             tv_lecturer = itemView.findViewById(R.id.tv_lecturer);
+            iv_edit = itemView.findViewById(R.id.btn_edit);
         }
     }
 }

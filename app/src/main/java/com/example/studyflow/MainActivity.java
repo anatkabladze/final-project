@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-      //          replaceFragment(new AddFragment());
+            showAddDialog();
             }
         });
 
@@ -65,5 +65,48 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, fragment)
                 .commit();
     }
+
+    private void showAddDialog() {
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_item, null);
+        final androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        dialogView.findViewById(R.id.tv_add_lecture).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+               // უნდა შევცვალო დიზაინის გმო
+              openAddLecture();
+            }
+        });
+
+        dialogView.findViewById(R.id.tv_add_task).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                // აქაც იგივე
+               openAddTask();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void openAddTask() {
+    }
+
+    private void openAddLecture() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new AddEditLectureFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+    public void reloadSchedule() {
+        replaceFragment(new ScheduleFragment());
+    }
+
+
 
 }

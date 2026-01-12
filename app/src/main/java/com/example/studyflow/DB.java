@@ -1,5 +1,6 @@
 package com.example.studyflow;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -64,6 +65,7 @@ public class DB extends SQLiteOpenHelper {
         return rowId;
     }
 
+    @SuppressLint("Range")
     public List<LectureItem> getLecturesByDay(int dayOfWeek) {
         List<LectureItem> lectureList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -78,13 +80,13 @@ public class DB extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 lectureList.add(new LectureItem(
-                        cursor.getInt(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getString(4),
-                        cursor.getString(5),
-                        cursor.getInt(6)
+                        cursor.getInt(cursor.getColumnIndex(col_lec_id)),
+                        cursor.getString(cursor.getColumnIndex(col_subject)),
+                        cursor.getString(cursor.getColumnIndex(col_start_time)),
+                        cursor.getString(cursor.getColumnIndex(col_end_time)),
+                        cursor.getString(cursor.getColumnIndex(col_room)),
+                        cursor.getString(cursor.getColumnIndex(col_teacher)),
+                        cursor.getInt(cursor.getColumnIndex(col_day_of_week))
                 ));
             } while (cursor.moveToNext());
         }
@@ -108,7 +110,7 @@ public class DB extends SQLiteOpenHelper {
         return updatedRows;
     }
 
-    // Delete lecture
+
     public int deleteLecture(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         int deletedRows = db.delete(table_lectures, col_lec_id + " = ?",
