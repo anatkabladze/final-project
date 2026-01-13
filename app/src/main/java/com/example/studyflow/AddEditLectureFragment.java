@@ -107,8 +107,7 @@ public class AddEditLectureFragment extends Fragment {
     }
 
     private void saveLecture() {
-        DB db = new DB(requireContext(), "studyflow.db", null, 1);
-
+        DB db = new DB(requireContext());
         int dayOfWeekForDB = dayAdapter.getPosition(etDay.getText().toString()) + 1;
 
 

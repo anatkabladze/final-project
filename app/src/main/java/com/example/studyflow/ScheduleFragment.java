@@ -29,6 +29,8 @@ public class ScheduleFragment extends Fragment {
     private LectureAdapter lectureAdapter;
     private RecyclerView rv_lectures;
     private int selectedDay = 0;
+    private TextView tv_free_day;
+
 
     @Nullable
     @Override
@@ -50,9 +52,9 @@ public class ScheduleFragment extends Fragment {
         dayList = new ArrayList<>();
         rv_lectures = view.findViewById(R.id.rv_lectures);
         rv_lectures.setLayoutManager(new LinearLayoutManager(getContext()));
+        tv_free_day = view.findViewById(R.id.tv_free_day);
 
-        db = new DB(getContext(), "studyflow.db", null, 1);
-
+        db = new DB(getContext());
 
 
         String[] weekdays = {"ორშ","სამშ","ოთხ","ხუთ","პარ","შაბ","კვი"};
@@ -105,7 +107,20 @@ public class ScheduleFragment extends Fragment {
     private void loadLecturesForDay(int dayIndex) {
         int dayOfWeekForDB = dayIndex + 1;
         List<LectureItem> lectures = db.getLecturesByDay(dayOfWeekForDB);
-        lectureAdapter = new LectureAdapter(lectures);
-        rv_lectures.setAdapter(lectureAdapter);
+        if (lectures == null || lectures.isEmpty()) {
+
+            rv_lectures.setVisibility(View.GONE);
+            tv_free_day.setVisibility(View.VISIBLE);
+        } else {
+
+            tv_free_day.setVisibility(View.GONE);
+            rv_lectures.setVisibility(View.VISIBLE);
+
+            lectureAdapter = new LectureAdapter(lectures);
+            rv_lectures.setAdapter(lectureAdapter);
+        }
+
+
+
     }
 }
