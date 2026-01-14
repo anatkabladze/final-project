@@ -21,6 +21,15 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
 
     private List<Task> taskList;
     private Context context;
+    private OnTaskStatusChangedListener statusListener;
+
+
+    public interface OnTaskStatusChangedListener {
+        void onTaskStatusChanged();
+    }
+    public void setOnTaskStatusChangedListener(OnTaskStatusChangedListener listener) {
+        this.statusListener = listener;
+    }
 
     public TasksAdapter(List<Task> taskList, Context context) {
         this.taskList = taskList;
@@ -37,7 +46,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
         Task task = taskList.get(position);
-
+        DB db = new DB(context);
         holder.tvTitle.setText(task.getTitle());
         holder.tvDescription.setText(task.getDescription());
         holder.tvLecture.setText(task.getLectureName());
@@ -60,6 +69,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
         long timeLeft = task.getDeadline() - now;
         long twoDays = 2 * 24 * 60 * 60 * 1000L;
 
+
         if (timeLeft < 0) {
            holder.tvDeadline.setTextColor(Color.RED);
         } else if (timeLeft < twoDays) {
@@ -70,21 +80,31 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
 
         holder.checkbox.setChecked(task.getIsCompleted() == 1);
 
-        if (task.getIsCompleted() == 1) {
+
+        updateTitleStyle(holder, task.getIsCompleted() == 1);
+
+        holder.checkbox.setOnClickListener(v -> {
+            int newStatus = holder.checkbox.isChecked() ? 1 : 0;
+            task.setIsCompleted(newStatus);
+
+            db.updateTaskStatus(task.getId(), newStatus);
+
+            updateTitleStyle(holder, newStatus == 1);
+
+            if (statusListener != null) {
+                statusListener.onTaskStatusChanged();
+            }
+        });
+    }
+
+    private void updateTitleStyle(TaskViewHolder holder, boolean isCompleted) {
+        if (isCompleted) {
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvTitle.setTextColor(Color.GRAY);
         } else {
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             holder.tvTitle.setTextColor(Color.BLACK);
         }
-
-        holder.checkbox.setOnClickListener(v -> {
-            DB db = new DB(context);
-            int newStatus = task.getIsCompleted() == 1 ? 0 : 1;
-            db.toggleTaskStatus(task.getId(), newStatus);
-            task.setIsCompleted(newStatus);
-            notifyItemChanged(position);
-        });
     }
 
     @Override

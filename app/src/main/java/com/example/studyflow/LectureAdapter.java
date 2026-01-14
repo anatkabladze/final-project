@@ -63,7 +63,8 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.LectureV
                             .setTitle("წაშლა")
                             .setMessage("დარწმუნებული ხართ რომ გინდათ წაშლა?")
                             .setPositiveButton("დიახ", (dialog, which) -> {
-                                DB db = new DB(v.getContext());                                db.deleteLecture(lecture.getId());
+                                DB db = new DB(v.getContext());
+                                db.deleteLecture(lecture.getId());
                                 ((MainActivity) v.getContext()).reloadSchedule();
                             })
                             .setNegativeButton("არა", null)

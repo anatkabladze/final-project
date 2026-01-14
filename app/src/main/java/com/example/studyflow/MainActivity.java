@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        dialogView.findViewById(R.id.tv_add_task).setOnClickListener(new View.OnClickListener() {
+        dialogView.findViewById(R.id.card_add_task).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -94,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openAddTask() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new AddEditTaskFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     private void openAddLecture() {

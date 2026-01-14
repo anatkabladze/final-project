@@ -220,16 +220,12 @@ public class DB extends SQLiteOpenHelper {
              return taskList;
          }
     @SuppressLint("Range")
-    public List<Task> getTasksByStatus(int isCompleted) {
+    public List<Task> getTasksByStatus(int isCompleted, String orderBy) {
         List<Task> taskList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(table_tasks,
-                null,
-                col_task_is_completed + " = ?",
-                new String[]{String.valueOf(isCompleted)},
-                null, null,
-                col_task_deadline + " asc");
+        Cursor cursor = db.query(table_tasks, null, col_task_is_completed + " = ?",
+                new String[]{String.valueOf(isCompleted)}, null, null, orderBy);
 
         if (cursor.moveToFirst()) {
             do {
@@ -279,7 +275,7 @@ public class DB extends SQLiteOpenHelper {
         return updatedRows;
     }
 
-    public int toggleTaskStatus(int taskId, int isCompleted) {
+    public int updateTaskStatus(int taskId, int isCompleted) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(col_task_is_completed, isCompleted);
