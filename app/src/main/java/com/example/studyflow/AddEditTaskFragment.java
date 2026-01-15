@@ -37,6 +37,8 @@ public class AddEditTaskFragment extends Fragment {
     private int taskId = -1;
     private boolean isReadOnly = false;
 
+    private TextInputEditText etNotifDays, etNotifHours, etNotifMinutes;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -53,7 +55,9 @@ public class AddEditTaskFragment extends Fragment {
         btnSave = view.findViewById(R.id.btn_save);
         btnCancel = view.findViewById(R.id.btn_cancel);
         cbStatus = view.findViewById(R.id.cb_status);
-
+        etNotifDays = view.findViewById(R.id.et_notif_days);
+        etNotifHours = view.findViewById(R.id.et_notif_hours);
+        etNotifMinutes = view.findViewById(R.id.et_notif_minutes);
         btnPickDate.setOnClickListener(v -> showDatePicker());
         btnPickTime.setOnClickListener(v -> showTimePicker());
 
@@ -122,7 +126,9 @@ public class AddEditTaskFragment extends Fragment {
         etDescription.setEnabled(status);
         etLecture.setEnabled(status);
 
-
+        etNotifDays.setEnabled(status);
+        etNotifHours.setEnabled(status);
+        etNotifMinutes.setEnabled(status);
 
         cbStatus.setEnabled(status);
         btnPickDate.setVisibility(status ? View.VISIBLE : View.GONE);
@@ -166,6 +172,21 @@ public class AddEditTaskFragment extends Fragment {
             if (task.getPriority() == 1) rgPriority.check(R.id.rb_priority_high);
             else if (task.getPriority() == 3) rgPriority.check(R.id.rb_priority_low);
             else rgPriority.check(R.id.rb_priority_medium);
+
+
+            if (task.getNotificationTime() > 0) {
+                long diff = task.getDeadline() - task.getNotificationTime();
+
+                long days = diff / (24 * 3600000L);
+                diff %= (24 * 3600000L);
+                long hours = diff / 3600000L;
+                diff %= 3600000L;
+                long minutes = diff / 60000L;
+
+                if (days > 0) etNotifDays.setText(String.valueOf(days));
+                if (hours > 0) etNotifHours.setText(String.valueOf(hours));
+                if (minutes > 0) etNotifMinutes.setText(String.valueOf(minutes));
+            }
         }
     }
 
@@ -208,7 +229,10 @@ public class AddEditTaskFragment extends Fragment {
             tvSelectedDeadline.setText(df.format(selectedDeadline.getTime()) + " - აირჩიეთ დრო");
         }
     }
-
+    private int getIntFromEt(TextInputEditText et) {
+        String val = et.getText().toString().trim();
+        return val.isEmpty() ? 0 : Integer.parseInt(val);
+    }
     private void saveTask() {
         String title = etTitle.getText().toString().trim();
         if (title.isEmpty()) {
@@ -229,13 +253,25 @@ public class AddEditTaskFragment extends Fragment {
         boolean success;
         int isCompleted = cbStatus.isChecked() ? 1 : 0;
 
+        int days = getIntFromEt(etNotifDays);
+        int hours = getIntFromEt(etNotifHours);
+        int minutes = getIntFromEt(etNotifMinutes);
+
+        long notificationTime = -1;
+        if (days > 0 || hours > 0 || minutes > 0) {
+            long offset = (days * 24 * 3600000L) + (hours * 3600000L) + (minutes * 60000L);
+            notificationTime = selectedDeadline.getTimeInMillis() - offset;
+        }
+
         if (taskId == -1) {
             Task task = new Task(title, etDescription.getText().toString(), etLecture.getText().toString(),
                     selectedDeadline.getTimeInMillis(), priority, isCompleted);
+
+            task.setNotificationTime(notificationTime);
             success = db.insertTask(task) > 0;
         } else {
             Task task = new Task(taskId, title, etDescription.getText().toString(), etLecture.getText().toString(),
-                    selectedDeadline.getTimeInMillis(), priority, isCompleted, System.currentTimeMillis(), null, -1);
+                    selectedDeadline.getTimeInMillis(), priority, isCompleted, System.currentTimeMillis(), null, notificationTime);
             success = db.updateTask(task) > 0;
         }
 

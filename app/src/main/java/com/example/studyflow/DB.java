@@ -211,7 +211,7 @@ public class DB extends SQLiteOpenHelper {
                              cursor.getInt(cursor.getColumnIndex(col_task_is_completed)),
                              cursor.getLong(cursor.getColumnIndex(col_task_created_at)),
                              completedAt,
-                             cursor.getInt(cursor.getColumnIndex(col_task_notification_time))
+                             cursor.getLong(cursor.getColumnIndex(col_task_notification_time))
                      ));
                  } while (cursor.moveToNext());
              }
@@ -244,7 +244,7 @@ public class DB extends SQLiteOpenHelper {
                         cursor.getInt(cursor.getColumnIndex(col_task_is_completed)),
                         cursor.getLong(cursor.getColumnIndex(col_task_created_at)),
                         completedAt,
-                        cursor.getInt(cursor.getColumnIndex(col_task_notification_time))
+                        cursor.getLong(cursor.getColumnIndex(col_task_notification_time))
                 ));
             } while (cursor.moveToNext());
         }
@@ -310,7 +310,7 @@ public class DB extends SQLiteOpenHelper {
                     cursor.getInt(cursor.getColumnIndex(col_task_is_completed)),
                     cursor.getLong(cursor.getColumnIndex(col_task_created_at)),
                     completedAt,
-                    cursor.getInt(cursor.getColumnIndex(col_task_notification_time))
+                    cursor.getLong(cursor.getColumnIndex(col_task_notification_time))
             );
             cursor.close();
             return task;

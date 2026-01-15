@@ -12,12 +12,11 @@ public class Task {
     private int isCompleted;
     private long createdAt;
     private Long completedAt;
-    private int notificationTime;
-
+    private long notificationTime;
 
     public Task(int id, String title, String description, String lectureName,
                 long deadline, int priority, int isCompleted,
-                long createdAt, Long completedAt, int notificationTime) {
+                long createdAt, Long completedAt, long notificationTime) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -43,6 +42,7 @@ public class Task {
         this.notificationTime = notificationTime;
     }
 
+
     public int getId() { return id; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }
@@ -52,7 +52,7 @@ public class Task {
     public int getIsCompleted() { return isCompleted; }
     public long getCreatedAt() { return createdAt; }
     public Long getCompletedAt() { return completedAt; }
-    public int getNotificationTime() { return notificationTime; }
+    public long getNotificationTime() { return notificationTime; }
 
     public void setId(int id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
@@ -63,5 +63,5 @@ public class Task {
     public void setIsCompleted(int isCompleted) { this.isCompleted = isCompleted; }
     public void setCreatedAt(long createdAt) { this.createdAt = createdAt; }
     public void setCompletedAt(Long completedAt) { this.completedAt = completedAt; }
-    public void setNotificationTime(int notificationTime) { this.notificationTime = notificationTime; }
+    public void setNotificationTime(long notificationTime) { this.notificationTime = notificationTime; }
 }
