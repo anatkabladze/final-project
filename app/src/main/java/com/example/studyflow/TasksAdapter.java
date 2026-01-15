@@ -95,6 +95,16 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
                 statusListener.onTaskStatusChanged();
             }
         });
+
+
+        holder.itemView.setOnClickListener(v -> {
+            if (context instanceof MainActivity) {
+
+                ((MainActivity) context).openTaskDetails(task.getId());
+            }
+        });
+
+
     }
 
     private void updateTitleStyle(TaskViewHolder holder, boolean isCompleted) {

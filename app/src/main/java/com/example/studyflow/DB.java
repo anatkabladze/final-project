@@ -292,6 +292,32 @@ public class DB extends SQLiteOpenHelper {
         return updatedRows;
     }
 
+    @SuppressLint("Range")
+    public Task getTaskById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(table_tasks, null, col_task_id + " = ?",
+                new String[]{String.valueOf(id)}, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            Long completedAt = cursor.isNull(cursor.getColumnIndex(col_task_completed_at)) ? null : cursor.getLong(cursor.getColumnIndex(col_task_completed_at));
+            Task task = new Task(
+                    cursor.getInt(cursor.getColumnIndex(col_task_id)),
+                    cursor.getString(cursor.getColumnIndex(col_task_title)),
+                    cursor.getString(cursor.getColumnIndex(col_task_description)),
+                    cursor.getString(cursor.getColumnIndex(col_task_lecture_name)),
+                    cursor.getLong(cursor.getColumnIndex(col_task_deadline)),
+                    cursor.getInt(cursor.getColumnIndex(col_task_priority)),
+                    cursor.getInt(cursor.getColumnIndex(col_task_is_completed)),
+                    cursor.getLong(cursor.getColumnIndex(col_task_created_at)),
+                    completedAt,
+                    cursor.getInt(cursor.getColumnIndex(col_task_notification_time))
+            );
+            cursor.close();
+            return task;
+        }
+        return null;
+    }
+
     public int deleteTask(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         int deletedRows = db.delete(table_tasks, col_task_id + " = ?",

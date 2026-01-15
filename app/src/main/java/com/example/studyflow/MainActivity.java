@@ -100,7 +100,31 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .commit();
     }
+    public void openTaskDetails(int taskId) {
+        AddEditTaskFragment fragment = new AddEditTaskFragment();
+        Bundle args = new Bundle();
+        args.putInt("taskId", taskId);
+        args.putBoolean("isReadOnly", true);
+        fragment.setArguments(args);
 
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+
+    public void openEditTask(int taskId) {
+        AddEditTaskFragment fragment = new AddEditTaskFragment();
+        Bundle args = new Bundle();
+        args.putInt("taskId", taskId);
+        fragment.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
     private void openAddLecture() {
         getSupportFragmentManager()
                 .beginTransaction()
