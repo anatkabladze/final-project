@@ -15,7 +15,7 @@ import java.util.List;
 public class DB extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "studyflow.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     public static final String table_lectures = "lectures";
     public static final String col_lec_id = "id";
     public static final String col_subject = "subject";
@@ -25,7 +25,7 @@ public class DB extends SQLiteOpenHelper {
     public static final String col_teacher = "teacher";
     public static final String col_day_of_week = "dayOfWeek";
 
-
+    public static final String col_lec_notification_time = "notification_time";
 
 
     public static final String table_tasks = "tasks";
@@ -65,7 +65,8 @@ public class DB extends SQLiteOpenHelper {
                 col_end_time + " TEXT, " +
                 col_room + " TEXT, " +
                 col_teacher + " TEXT, " +
-                col_day_of_week + " INTEGER" +
+                col_day_of_week + " INTEGER, " +
+                col_lec_notification_time + " INTEGER DEFAULT 0" +
                 ");";
         db.execSQL(create_lectures_table);
 
@@ -111,6 +112,7 @@ public class DB extends SQLiteOpenHelper {
         cv.put(col_room, lecture.getRoom());
         cv.put(col_teacher, lecture.getTeacher());
         cv.put(col_day_of_week, lecture.getDayOfWeek());
+        cv.put(col_lec_notification_time, lecture.getNotificationTime());
 
         long rowId = db.insert(table_lectures, null, cv);
         db.close();
@@ -138,7 +140,8 @@ public class DB extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndex(col_end_time)),
                         cursor.getString(cursor.getColumnIndex(col_room)),
                         cursor.getString(cursor.getColumnIndex(col_teacher)),
-                        cursor.getInt(cursor.getColumnIndex(col_day_of_week))
+                        cursor.getInt(cursor.getColumnIndex(col_day_of_week)),
+                        cursor.getLong(cursor.getColumnIndex(col_lec_notification_time))
                 ));
             } while (cursor.moveToNext());
         }
@@ -155,6 +158,7 @@ public class DB extends SQLiteOpenHelper {
         cv.put(col_room, lecture.getRoom());
         cv.put(col_teacher, lecture.getTeacher());
         cv.put(col_day_of_week, lecture.getDayOfWeek());
+        cv.put(col_lec_notification_time, lecture.getNotificationTime());
 
         int updatedRows = db.update(table_lectures, cv, col_lec_id + " = ?",
                 new String[]{String.valueOf(lecture.getId())});

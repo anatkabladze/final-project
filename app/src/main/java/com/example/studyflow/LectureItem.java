@@ -11,10 +11,11 @@ public class LectureItem {
     private int dayOfWeek;
     private long dateMillis;
     private int notifyEnabled;
+    private long notificationTime;
 
     public LectureItem(int id, String subject, String startTime, String endTime,
                        String room, String teacher, int dayOfWeek,
-                       long dateMillis, int notifyEnabled) {
+                       long dateMillis, int notifyEnabled,long notificationTime) {
         this.id = id;
         this.subject = subject;
         this.startTime = startTime;
@@ -24,8 +25,19 @@ public class LectureItem {
         this.dayOfWeek = dayOfWeek;
         this.dateMillis = dateMillis;
         this.notifyEnabled = notifyEnabled;
+        this.notificationTime = notificationTime;
     }
-
+    public LectureItem(int id, String subject, String startTime, String endTime,
+                       String room, String teacher, int dayOfWeek, long notificationTime) {
+        this.id = id;
+        this.subject = subject;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.room = room;
+        this.teacher = teacher;
+        this.dayOfWeek = dayOfWeek;
+        this.notificationTime = notificationTime;
+    }
     public LectureItem(int id, String subject, String startTime, String endTime,
                        String room, String teacher, int dayOfWeek) {
         this.id = id;
@@ -35,6 +47,7 @@ public class LectureItem {
         this.room = room;
         this.teacher = teacher;
         this.dayOfWeek = dayOfWeek;
+        this.notificationTime = 0;
     }
 
 
@@ -59,4 +72,7 @@ public class LectureItem {
     public void setDayOfWeek(int dayOfWeek) { this.dayOfWeek = dayOfWeek; }
     public void setDateMillis(long dateMillis) { this.dateMillis = dateMillis; }
     public void setNotifyEnabled(int notifyEnabled) { this.notifyEnabled = notifyEnabled; }
+    public long getNotificationTime() { return notificationTime; }
+    public void setNotificationTime(long notificationTime) { this.notificationTime = notificationTime; }
+
 }

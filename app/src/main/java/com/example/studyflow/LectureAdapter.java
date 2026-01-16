@@ -45,6 +45,7 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.LectureV
                     bundle.putString("room", lecture.getRoom());
                     bundle.putString("teacher", lecture.getTeacher());
                     bundle.putInt("day", lecture.getDayOfWeek());
+            bundle.putLong("notificationTime", lecture.getNotificationTime());
 
                     AddEditLectureFragment fragment = new AddEditLectureFragment();
                     fragment.setArguments(bundle);

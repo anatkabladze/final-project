@@ -27,7 +27,7 @@ public class AddEditTaskFragment extends Fragment {
 
     private TextInputEditText etTitle, etDescription, etLecture;
     private Button btnPickDate, btnPickTime, btnSave, btnCancel;
-    private TextView tvSelectedDeadline;
+    private TextView tvSelectedDeadline,tv_addedit_task_title;
     private RadioGroup rgPriority;
     private CheckBox cbStatus;
 
@@ -58,24 +58,29 @@ public class AddEditTaskFragment extends Fragment {
         etNotifDays = view.findViewById(R.id.et_notif_days);
         etNotifHours = view.findViewById(R.id.et_notif_hours);
         etNotifMinutes = view.findViewById(R.id.et_notif_minutes);
+        tv_addedit_task_title=view.findViewById(R.id.tv_addedit_task_title);
         btnPickDate.setOnClickListener(v -> showDatePicker());
         btnPickTime.setOnClickListener(v -> showTimePicker());
 
-        if (getArguments() != null) {
+        if (getArguments() != null && getArguments().containsKey("taskId")) {
             taskId = getArguments().getInt("taskId", -1);
             isReadOnly = getArguments().getBoolean("isReadOnly", false);
 
             if (taskId != -1) {
                 loadTaskData(taskId);
                 if (isReadOnly) {
+                    tv_addedit_task_title.setText("დავალების დეტალები");
                     setupReadOnlyMode();
                 } else {
+                    tv_addedit_task_title.setText("დავალების რედაქტირება");
                     setupEditMode();
                 }
             } else {
+                tv_addedit_task_title.setText("დავალების დამატება");
                 setupAddMode();
             }
         } else {
+            tv_addedit_task_title.setText("დავალების დამატება");
             setupAddMode();
         }
 
@@ -113,6 +118,8 @@ public class AddEditTaskFragment extends Fragment {
 
     private void enableEditing() {
         toggleInputs(true);
+
+        tv_addedit_task_title.setText("დავალების რედაქტირება");
         btnSave.setText("განახლება");
         btnSave.setOnClickListener(v -> saveTask());
 
@@ -237,6 +244,7 @@ public class AddEditTaskFragment extends Fragment {
         String title = etTitle.getText().toString().trim();
         if (title.isEmpty()) {
             etTitle.setError("შეავსეთ დასახელება");
+            etTitle.requestFocus();
             return;
         }
         if (!isDateSet || !isTimeSet) {

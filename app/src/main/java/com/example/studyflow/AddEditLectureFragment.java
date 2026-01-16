@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.AutoCompleteTextView;
-
+import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
@@ -21,10 +21,11 @@ import java.util.Locale;
 
 public class AddEditLectureFragment extends Fragment {
     EditText etSubject, etStart, etEnd, etRoom, etTeacher;
-
+    private com.google.android.material.textfield.TextInputEditText  etNotifHours, etNotifMinutes;
     Button btnSave;
     AutoCompleteTextView etDay;
     ArrayAdapter<String> dayAdapter;
+    TextView tvTitlelecture;
     // ედიტისტვის
     private int lectureId = -1;
 
@@ -39,6 +40,9 @@ public class AddEditLectureFragment extends Fragment {
         etDay = v.findViewById(R.id.et_day);
         btnSave   = v.findViewById(R.id.btn_save);
 
+        etNotifHours = v.findViewById(R.id.et_notif_hours);
+        etNotifMinutes = v.findViewById(R.id.et_notif_minutes);
+        tvTitlelecture = v.findViewById(R.id.tv_title_lecture );
         String[] days = {"ორშაბათი","სამშაბათი","ოთხშაბათი","ხუთშაბათი","პარასკევი","შაბათი","კვირა"};
        dayAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, days);
         etDay.setAdapter(dayAdapter);
@@ -46,18 +50,31 @@ public class AddEditLectureFragment extends Fragment {
         if (getArguments() != null) {
             lectureId = getArguments().getInt("lectureId", -1);
 
-            if (lectureId != -1) { //  tu editia
+            if (lectureId != -1) {
+                tvTitlelecture.setText("ლექციის რედაქტირება"); //  tu editia
                 etSubject.setText(getArguments().getString("subject"));
                 etStart.setText(getArguments().getString("start"));
                 etEnd.setText(getArguments().getString("end"));
                 etRoom.setText(getArguments().getString("room"));
                 etTeacher.setText(getArguments().getString("teacher"));
 
+                long notifMillis = getArguments().getLong("notificationTime", 0);
+                if (notifMillis > 0) {
 
+                    long hours = (notifMillis % (24 * 3600000L)) / 3600000L;
+                    long minutes = (notifMillis % 3600000L) / 60000L;
+
+
+                    if (hours > 0) etNotifHours.setText(String.valueOf(hours));
+                    if (minutes > 0) etNotifMinutes.setText(String.valueOf(minutes));
+                }
                 int day = getArguments().getInt("day", 1);
                 if (day >= 1 && day <= days.length) {
                     etDay.setText(days[day - 1], false);
                 }
+            }
+            else {
+                tvTitlelecture.setText("ლექციის დამატება");
             }
         }
 
@@ -106,10 +123,49 @@ public class AddEditLectureFragment extends Fragment {
         timePickerDialog.show();
     }
 
+    private int getIntFromEt(com.google.android.material.textfield.TextInputEditText et) {
+        String val = et.getText().toString().trim();
+        return val.isEmpty() ? 0 : Integer.parseInt(val);
+    }
+
     private void saveLecture() {
+
+        String subject = etSubject.getText().toString().trim();
+        String start = etStart.getText().toString().trim();
+        String end = etEnd.getText().toString().trim();
+        String day = etDay.getText().toString().trim();
+
+
+        if (subject.isEmpty()) {
+            etSubject.setError("საგნის სახელი აუცილებელია");
+            etSubject.requestFocus();
+            return;
+        }
+
+        if (start.isEmpty()) {
+            etStart.setError("დაწყების დრო აუცილებელია");
+            return;
+        }
+
+        if (end.isEmpty()) {
+            etEnd.setError("დასრულების დრო აუცილებელია");
+            return;
+        }
+
+        if (day.isEmpty()) {
+            etDay.setError("აირჩიეთ კვირის დღე");
+            return;
+        }
+
+
         DB db = new DB(requireContext());
         int dayOfWeekForDB = dayAdapter.getPosition(etDay.getText().toString()) + 1;
 
+
+
+        int hours = getIntFromEt(etNotifHours);
+        int minutes = getIntFromEt(etNotifMinutes);
+        long notificationOffset =  (hours * 3600000L) + (minutes * 60000L);
 
         LectureItem lecture = new LectureItem(
                 lectureId,
@@ -118,7 +174,8 @@ public class AddEditLectureFragment extends Fragment {
                 etEnd.getText().toString(),
                 etRoom.getText().toString(),
                 etTeacher.getText().toString(),
-                dayOfWeekForDB
+                dayOfWeekForDB,
+                notificationOffset
         );
         if (lectureId == -1) {
             db.insertLecture(lecture);
