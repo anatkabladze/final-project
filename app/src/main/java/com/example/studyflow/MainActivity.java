@@ -12,9 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,19 +29,19 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        replaceFragment(new ScheduleFragment());
+        replaceFragment(new LecturesFragment());
 
         btn_schedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragment(new ScheduleFragment());
+                replaceFragment(new LecturesFragment());
             }
         });
 
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-     //           replaceFragment(new SearchFragment());
+               replaceFragment(new SearchFragment());
             }
         });
 
@@ -148,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
     public void reloadSchedule() {
-        replaceFragment(new ScheduleFragment());
+        replaceFragment(new LecturesFragment());
     }
 
 

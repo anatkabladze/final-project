@@ -14,11 +14,16 @@ import java.util.List;
 
 public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.LectureViewHolder> {
     private List<LectureItem> lectureList;
-
+    private boolean isSearchMode = false;
     public LectureAdapter(List<LectureItem> lectureList) {
         this.lectureList = lectureList;
     }
 
+
+    public LectureAdapter(List<LectureItem> lectureList, boolean isSearchMode) {
+        this.lectureList = lectureList;
+        this.isSearchMode = isSearchMode;
+    }
     @NonNull
     @Override
     public LectureViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,6 +40,16 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.LectureV
         holder.tv_subject.setText(lecture.getSubject());
         holder.tv_room.setText(lecture.getRoom());
         holder.tv_lecturer.setText(lecture.getTeacher());
+
+
+
+        if (isSearchMode) {
+            holder.tv_day_name.setVisibility(View.VISIBLE);
+            holder.tv_day_name.setText(getDayName(lecture.getDayOfWeek()));
+        } else {
+            holder.tv_day_name.setVisibility(View.GONE);
+        }
+
 
         holder.iv_edit.setOnClickListener(v -> {
                     Bundle bundle = new Bundle();
@@ -74,7 +89,20 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.LectureV
                 }
             });
         }
-    @Override
+
+
+    private String getDayName(int day) {
+        switch (day) {
+            case 1: return "ორშაბათი";
+            case 2: return "სამშაბათი";
+            case 3: return "ოთხშაბათი";
+            case 4: return "ხუთშაბათი";
+            case 5: return "პარასკევი";
+            case 6: return "შაბათი";
+            case 7: return "კვირა";
+            default: return "";
+        }
+    }
 
     public int getItemCount() {
         return lectureList.size();
@@ -82,7 +110,7 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.LectureV
 
     static class LectureViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_time, tv_subject, tv_room, tv_lecturer;
+        TextView tv_time, tv_subject, tv_room, tv_lecturer, tv_day_name;
         ImageView iv_edit;
         public LectureViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,6 +119,7 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.LectureV
             tv_room = itemView.findViewById(R.id.tv_room);
             tv_lecturer = itemView.findViewById(R.id.tv_lecturer);
             iv_edit = itemView.findViewById(R.id.btn_edit);
+            tv_day_name = itemView.findViewById(R.id.tv_day_name);
         }
     }
 }

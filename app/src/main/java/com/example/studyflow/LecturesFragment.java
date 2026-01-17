@@ -10,9 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SnapHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class ScheduleFragment extends Fragment {
+public class LecturesFragment extends Fragment {
 
     private RecyclerView rv_days;
     private DayAdapter dayAdapter;

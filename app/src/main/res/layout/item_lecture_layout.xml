@@ -23,15 +23,32 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="8dp">
 
-            <TextView
-                android:id="@+id/tv_time"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="10:00 - 11:30"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="#1976D2"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_day_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ორშაბათი"
+                    android:textColor="#FF5722"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="2dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10:00 - 11:30"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#1976D2"/>
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/btn_edit"

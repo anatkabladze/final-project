@@ -331,5 +331,61 @@ public class DB extends SQLiteOpenHelper {
     }
 
 
+    @SuppressLint("Range")
+    public List<LectureItem> searchLectures(String query) {
+        List<LectureItem> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // ვიყენებთ LIKE ოპერატორს, რომ ტექსტის ნაწილიც იპოვოს
+        Cursor cursor = db.query(table_lectures, null, col_subject + " LIKE ?",
+                new String[]{"%" + query + "%"}, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(new LectureItem(
+                        cursor.getInt(cursor.getColumnIndex(col_lec_id)),
+                        cursor.getString(cursor.getColumnIndex(col_subject)),
+                        cursor.getString(cursor.getColumnIndex(col_start_time)),
+                        cursor.getString(cursor.getColumnIndex(col_end_time)),
+                        cursor.getString(cursor.getColumnIndex(col_room)),
+                        cursor.getString(cursor.getColumnIndex(col_teacher)),
+                        cursor.getInt(cursor.getColumnIndex(col_day_of_week)),
+                        cursor.getLong(cursor.getColumnIndex(col_lec_notification_time))
+                ));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return list;
+    }
+
+    @SuppressLint("Range")
+    public List<Task> searchTasks(String query) {
+        List<Task> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(table_tasks, null, col_task_title + " LIKE ?",
+                new String[]{"%" + query + "%"}, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Long completedAt = cursor.isNull(cursor.getColumnIndex(col_task_completed_at)) ? null : cursor.getLong(cursor.getColumnIndex(col_task_completed_at));
+                list.add(new Task(
+                        cursor.getInt(cursor.getColumnIndex(col_task_id)),
+                        cursor.getString(cursor.getColumnIndex(col_task_title)),
+                        cursor.getString(cursor.getColumnIndex(col_task_description)),
+                        cursor.getString(cursor.getColumnIndex(col_task_lecture_name)),
+                        cursor.getLong(cursor.getColumnIndex(col_task_deadline)),
+                        cursor.getInt(cursor.getColumnIndex(col_task_priority)),
+                        cursor.getInt(cursor.getColumnIndex(col_task_is_completed)),
+                        cursor.getLong(cursor.getColumnIndex(col_task_created_at)),
+                        completedAt,
+                        cursor.getLong(cursor.getColumnIndex(col_task_notification_time))
+                ));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return list;
+    }
+
 
 }
