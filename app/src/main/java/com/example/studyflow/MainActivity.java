@@ -1,11 +1,17 @@
 package com.example.studyflow;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -55,6 +61,15 @@ public class MainActivity extends AppCompatActivity {
                replaceFragment(new TasksFragment());
             }
         });
+
+
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 102);
+            }
+        }
+
 
 
     }
@@ -134,6 +149,21 @@ public class MainActivity extends AppCompatActivity {
     }
     public void reloadSchedule() {
         replaceFragment(new ScheduleFragment());
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 102) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "შეტყობინებები ჩაირთო", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "შეტყობინებების უფლება უარყოფილია", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 

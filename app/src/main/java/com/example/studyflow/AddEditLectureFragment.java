@@ -1,6 +1,8 @@
 package com.example.studyflow;
 
+import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -177,13 +179,18 @@ public class AddEditLectureFragment extends Fragment {
                 dayOfWeekForDB,
                 notificationOffset
         );
+
+        long finalId;
         if (lectureId == -1) {
-            db.insertLecture(lecture);
+            finalId = db.insertLecture(lecture);
         } else {
 
             db.updateLecture(lecture);
+            finalId = lectureId;
         }
-
+        if (notificationOffset > 0) {
+            scheduleLectureNotification((int)finalId, subject, start, dayOfWeekForDB, notificationOffset);
+        }
 
         if (getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).reloadSchedule();
@@ -191,4 +198,56 @@ public class AddEditLectureFragment extends Fragment {
         getParentFragmentManager().popBackStack();
 
     }
+
+    @SuppressLint("ScheduleExactAlarm")
+    private void scheduleLectureNotification(int id, String subject, String startTime, int dayOfWeek, long offset) {
+        if (offset <= 0) return;
+
+        Calendar calendar = Calendar.getInstance();
+        long now = System.currentTimeMillis();
+
+        int targetAndroidDay = dayOfWeek + 1;
+        if (targetAndroidDay > 7) targetAndroidDay = 1;
+
+
+            String[] parts = startTime.split(":");
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+
+        int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+        int daysUntil = (targetAndroidDay - currentDay + 7) % 7;
+        calendar.add(Calendar.DAY_OF_YEAR, daysUntil);
+
+        long triggerTime = calendar.getTimeInMillis() - offset;
+
+        if (triggerTime <= now) {
+            calendar.add(Calendar.DAY_OF_YEAR, 7);
+            triggerTime = calendar.getTimeInMillis() - offset;
+        }
+
+        Context context = getContext();
+        if (context == null) return;
+
+        android.app.AlarmManager alarmManager = (android.app.AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        android.content.Intent intent = new android.content.Intent(context, NotificationReceiver.class);
+        intent.putExtra("title", "ლექცია: " + subject);
+        intent.putExtra("message", "იწყება " + startTime + "-ზე");
+        intent.putExtra("id", id + 1000);
+
+        android.app.PendingIntent pendingIntent = android.app.PendingIntent.getBroadcast(
+                context, id + 1000, intent,
+                android.app.PendingIntent.FLAG_UPDATE_CURRENT | android.app.PendingIntent.FLAG_IMMUTABLE);
+
+        if (alarmManager != null) {
+            alarmManager.set(android.app.AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("EEEE, HH:mm", java.util.Locale.getDefault());
+            android.widget.Toast.makeText(context, "შეხსენება: " + sdf.format(new java.util.Date(triggerTime)), android.widget.Toast.LENGTH_LONG).show();
+        }
+    }
+
+
 }

@@ -1,7 +1,9 @@
 package com.example.studyflow;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -284,10 +286,39 @@ public class AddEditTaskFragment extends Fragment {
         }
 
         if (success) {
+            if (notificationTime > System.currentTimeMillis()) {
+                int idForAlarm = (taskId == -1) ? (int) System.currentTimeMillis() : taskId;
+
+                scheduleNotification(idForAlarm, "შეხსენება: " + title, "დედლაინი ახლოვდება!", notificationTime);
+            }
             Toast.makeText(getContext(), "შენახულია", Toast.LENGTH_SHORT).show();
             getParentFragmentManager().popBackStack();
         } else {
             Toast.makeText(getContext(), "შეცდომა!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    @SuppressLint("ScheduleExactAlarm")
+    private void scheduleNotification(int id, String title, String message, long triggerTime) {
+        Context context = getContext();
+        if (context == null) return;
+
+        android.content.Intent intent = new android.content.Intent(context, NotificationReceiver.class);
+
+
+        intent.putExtra("title", title);
+        intent.putExtra("message", message);
+        intent.putExtra("id", id);
+
+        android.app.PendingIntent pendingIntent = android.app.PendingIntent.getBroadcast(requireContext(), id, intent, android.app.PendingIntent.FLAG_UPDATE_CURRENT | android.app.PendingIntent.FLAG_IMMUTABLE);
+
+        android.app.AlarmManager alarmManager = (android.app.AlarmManager) requireContext().getSystemService(android.content.Context.ALARM_SERVICE);
+
+        if (alarmManager != null) {
+
+            alarmManager.set(android.app.AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+
         }
     }
 }
