@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.studyflow"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.studyflow"
@@ -41,4 +39,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

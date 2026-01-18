@@ -33,7 +33,7 @@ public class LecturesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.schedule_fragment_layout, container, false);
+        return inflater.inflate(R.layout.lecture_fragment_layout, container, false);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class LecturesFragment extends Fragment {
 
         int diffToMonday = (Calendar.MONDAY - todayDayOfWeek + 7) % 7;
 
-     //ორშაბათიდან
+        //ორშაბათიდან
         tempCal.add(Calendar.DAY_OF_MONTH, diffToMonday);
 
 
@@ -74,11 +74,15 @@ public class LecturesFragment extends Fragment {
             dayList.add(new DayItem(weekdays[i], dayNumber));
             tempCal.add(Calendar.DAY_OF_MONTH, 1);
         }
-
-        dayAdapter = new DayAdapter(dayList, dayIndex -> {
-            selectedDay = dayIndex;
-            loadLecturesForDay(dayIndex );
-        });
+//ინტერფეისის ობიექტი
+        DayAdapter.OnDayClickListener listener = new DayAdapter.OnDayClickListener() {
+            @Override
+            public void onDayClick(int dayIndex) {
+                selectedDay = dayIndex;
+                loadLecturesForDay(dayIndex);
+            }
+        };
+        dayAdapter = new DayAdapter(dayList, listener);
 
 
         rv_days.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -89,14 +93,11 @@ public class LecturesFragment extends Fragment {
         selectedDay = todayIndex;
         dayAdapter.setSelectedDay(todayIndex);
 
-        rv_days.post(() -> {
+
             dayAdapter.setSelectedDay(todayIndex);
             rv_days.scrollToPosition(todayIndex);
-        });
 
 
-//        SnapHelper snapHelper = new LinearSnapHelper();
-//        snapHelper.attachToRecyclerView(rv_days);
 
 
         loadLecturesForDay(todayIndex);

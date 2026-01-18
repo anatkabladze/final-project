@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity {
- LinearLayout btn_schedule, btn_search, btn_add, btn_tasks;
+ LinearLayout btn_schedule, btn_search, btn_add, btn_tasks,btn_stats;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         btn_search   = findViewById(R.id.btn_search);
         btn_add      = findViewById(R.id.btn_add);
         btn_tasks    = findViewById(R.id.btn_tasks);
+        btn_stats = findViewById(R.id.btn_stats);
 
 
 
@@ -60,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        btn_stats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new StatisticsFragment());
+            }
+        });
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {

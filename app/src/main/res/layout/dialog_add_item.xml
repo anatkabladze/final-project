@@ -32,13 +32,7 @@
             android:padding="18dp"
             android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:text="📚"
-                android:textSize="26sp"
-                android:gravity="center"
-                android:layout_marginEnd="16dp"/>
+
 
             <TextView
                 android:id="@+id/tv_add_lecture"
@@ -76,13 +70,7 @@
             android:padding="18dp"
             android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:text="✓"
-                android:textSize="26sp"
-                android:gravity="center"
-                android:layout_marginEnd="16dp"/>
+
 
             <TextView
                 android:id="@+id/tv_add_task"

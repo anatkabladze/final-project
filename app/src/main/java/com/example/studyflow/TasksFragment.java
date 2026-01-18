@@ -26,7 +26,7 @@ public class TasksFragment extends Fragment {
     private RecyclerView recyclerView;
     private TasksAdapter adapter;
     private List<Task> taskList;
-    private FloatingActionButton fabAddTask;
+
     private Button btnPending, btnCompleted;
     private Spinner spinnerSort;
 
@@ -39,7 +39,7 @@ public class TasksFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tasks, container, false);
 
         recyclerView = view.findViewById(R.id.recycler_view_tasks);
-        fabAddTask = view.findViewById(R.id.fab_add_task);
+
         btnPending = view.findViewById(R.id.btn_pending);
         btnCompleted = view.findViewById(R.id.btn_completed);
         spinnerSort = view.findViewById(R.id.spinner_sort);
@@ -65,13 +65,7 @@ public class TasksFragment extends Fragment {
             loadTasks();
         });
 
-        fabAddTask.setOnClickListener(v -> {
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, new AddEditTaskFragment())
-                    .addToBackStack(null)
-                    .commit();
-        });
+
 
         loadTasks();
         return view;

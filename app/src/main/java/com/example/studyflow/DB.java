@@ -124,12 +124,7 @@ public class DB extends SQLiteOpenHelper {
         List<LectureItem> lectureList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(table_lectures,
-                null,
-                col_day_of_week + " = ?",
-                new String[]{String.valueOf(dayOfWeek)},
-                null, null,
-                col_start_time + " ASC");
+        Cursor cursor = db.query(table_lectures, null, col_day_of_week + " = ?", new String[]{String.valueOf(dayOfWeek)}, null, null, col_start_time + " ASC");
 
         if (cursor.moveToFirst()) {
             do {
@@ -387,5 +382,71 @@ public class DB extends SQLiteOpenHelper {
         return list;
     }
 
+
+    public int getTotalTasksCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + table_tasks, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
+
+    public int getCompletedTasksCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + table_tasks + " WHERE " + col_task_is_completed + " = 1", null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
+
+    public int getTasksCountByPriority(int priority) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + table_tasks + " WHERE " + col_task_priority + " = ?", new String[]{String.valueOf(priority)});
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
+    // აარარი სესრულებული და ვადა გავდა
+    public int getOverdueTasksCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        long currentTime = System.currentTimeMillis();
+
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + table_tasks + " WHERE " + col_task_is_completed + " = 0 AND " + col_task_deadline + " < ?", new String[]{String.valueOf(currentTime)});
+
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
+
+    // არარის შესრულებული მარა აქვთ დრო სესრულებისთვის
+    public int getOnTimePendingTasksCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        long currentTime = System.currentTimeMillis();
+
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + table_tasks + " WHERE " + col_task_is_completed + " = 0 AND " + col_task_deadline + " >= ?", new String[]{String.valueOf(currentTime)});
+
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
+
+    public int getOnTimeCompletedTasksCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + table_tasks + " WHERE " + col_task_is_completed + " = 1 AND " + col_task_completed_at + " <= " + col_task_deadline, null);
+
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
 
 }

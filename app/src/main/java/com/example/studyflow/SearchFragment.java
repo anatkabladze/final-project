@@ -58,7 +58,7 @@ public class SearchFragment  extends Fragment {
                 performSearch(s.toString().trim());
             }
 
-            public void afterTextChanged(CharSequence s) {}
+
         });
     }
     private void performSearch(String query) {

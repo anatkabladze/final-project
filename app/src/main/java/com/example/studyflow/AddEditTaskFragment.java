@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ public class AddEditTaskFragment extends Fragment {
     private TextView tvSelectedDeadline,tv_addedit_task_title;
     private RadioGroup rgPriority;
     private CheckBox cbStatus;
+    ImageButton btnBackArrow;
 
     private Calendar selectedDeadline = Calendar.getInstance();
     private boolean isDateSet = false;
@@ -63,6 +65,16 @@ public class AddEditTaskFragment extends Fragment {
         tv_addedit_task_title=view.findViewById(R.id.tv_addedit_task_title);
         btnPickDate.setOnClickListener(v -> showDatePicker());
         btnPickTime.setOnClickListener(v -> showTimePicker());
+       btnBackArrow = view.findViewById(R.id.btn_back_arrow);
+
+
+        if (btnBackArrow != null) {
+            btnBackArrow.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+            });
+        }
 
         if (getArguments() != null && getArguments().containsKey("taskId")) {
             taskId = getArguments().getInt("taskId", -1);
@@ -86,6 +98,10 @@ public class AddEditTaskFragment extends Fragment {
             setupAddMode();
         }
 
+
+
+
+
         return view;
     }
 
@@ -93,41 +109,47 @@ public class AddEditTaskFragment extends Fragment {
         toggleInputs(true);
         cbStatus.setVisibility(View.GONE);
         btnSave.setText("შენახვა");
+        btnSave.setBackgroundTintList(ColorStateList.valueOf(android.graphics.Color.parseColor("#5C6BC0"))); // მშვიდი ლურჯი
         btnSave.setOnClickListener(v -> saveTask());
-        btnCancel.setText("გაუქმება");
-        btnCancel.setOnClickListener(v -> getParentFragmentManager().popBackStack());
+        btnCancel.setVisibility(View.GONE);
     }
 
     private void setupEditMode() {
         toggleInputs(true);
         btnSave.setText("განახლება");
-        cbStatus.setVisibility(View.VISIBLE);
+        btnSave.setBackgroundTintList(ColorStateList.valueOf(android.graphics.Color.parseColor("#5C6BC0")));
         btnSave.setOnClickListener(v -> saveTask());
+
+        cbStatus.setVisibility(View.VISIBLE);
+
         btnCancel.setText("წაშლა");
-        btnCancel.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.holo_red_light)));
+        btnCancel.setBackgroundTintList(ColorStateList.valueOf(android.graphics.Color.parseColor("#EF5350"))); // რბილი წითელი
         btnCancel.setOnClickListener(v -> deleteTask());
     }
 
     private void setupReadOnlyMode() {
         toggleInputs(false);
         btnSave.setText("რედაქტირება");
+        btnSave.setBackgroundTintList(ColorStateList.valueOf(android.graphics.Color.parseColor("#5C6BC0")));
         btnSave.setOnClickListener(v -> enableEditing());
+
         cbStatus.setVisibility(View.VISIBLE);
+
         btnCancel.setText("წაშლა");
-        btnCancel.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.holo_red_light)));
+        btnCancel.setBackgroundTintList(ColorStateList.valueOf(android.graphics.Color.parseColor("#EF5350")));
         btnCancel.setOnClickListener(v -> deleteTask());
     }
 
     private void enableEditing() {
         toggleInputs(true);
-
         tv_addedit_task_title.setText("დავალების რედაქტირება");
+
         btnSave.setText("განახლება");
         btnSave.setOnClickListener(v -> saveTask());
 
-        btnCancel.setText("გაუქმება");
-        btnCancel.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.darker_gray)));
-        btnCancel.setOnClickListener(v -> getParentFragmentManager().popBackStack());
+        btnCancel.setText("წაშლა");
+        btnCancel.setBackgroundTintList(ColorStateList.valueOf(android.graphics.Color.parseColor("#EF5350")));
+        btnCancel.setOnClickListener(v -> deleteTask());
     }
 
     private void toggleInputs(boolean status) {
@@ -237,6 +259,7 @@ public class AddEditTaskFragment extends Fragment {
             SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
             tvSelectedDeadline.setText(df.format(selectedDeadline.getTime()) + " - აირჩიეთ დრო");
         }
+
     }
     private int getIntFromEt(TextInputEditText et) {
         String val = et.getText().toString().trim();

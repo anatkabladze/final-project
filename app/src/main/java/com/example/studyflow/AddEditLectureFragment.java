@@ -23,7 +23,7 @@ import java.util.Locale;
 
 public class AddEditLectureFragment extends Fragment {
     EditText etSubject, etStart, etEnd, etRoom, etTeacher;
-    private com.google.android.material.textfield.TextInputEditText  etNotifHours, etNotifMinutes;
+    private EditText etNotifHours, etNotifMinutes;
     Button btnSave;
     AutoCompleteTextView etDay;
     ArrayAdapter<String> dayAdapter;
@@ -44,7 +44,9 @@ public class AddEditLectureFragment extends Fragment {
 
         etNotifHours = v.findViewById(R.id.et_notif_hours);
         etNotifMinutes = v.findViewById(R.id.et_notif_minutes);
-        tvTitlelecture = v.findViewById(R.id.tv_title_lecture );
+        tvTitlelecture = v.findViewById(R.id.tv_title_lecture);
+
+
         String[] days = {"ორშაბათი","სამშაბათი","ოთხშაბათი","ხუთშაბათი","პარასკევი","შაბათი","კვირა"};
        dayAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, days);
         etDay.setAdapter(dayAdapter);
@@ -125,7 +127,7 @@ public class AddEditLectureFragment extends Fragment {
         timePickerDialog.show();
     }
 
-    private int getIntFromEt(com.google.android.material.textfield.TextInputEditText et) {
+    private int getIntFromEt(EditText et) {
         String val = et.getText().toString().trim();
         return val.isEmpty() ? 0 : Integer.parseInt(val);
     }

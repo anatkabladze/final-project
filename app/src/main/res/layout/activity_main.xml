@@ -41,7 +41,7 @@
                 android:src="@android:drawable/ic_menu_my_calendar"/>
 
             <TextView
-                android:text="@string/schedule"
+                android:text="ლექციები"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textSize="12sp"/>
@@ -64,7 +64,7 @@
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="@string/search"
+                android:text="ძებნა"
                 android:textSize="12sp"/>
         </LinearLayout>
 
@@ -86,7 +86,7 @@
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="@string/add"
+                android:text="დამატება"
                 android:textSize="12sp"/>
         </LinearLayout>
 
@@ -106,7 +106,27 @@
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="@string/tasks"
+                android:text="დავალებები"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_stats"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_sort_by_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="სტატისტიკა"
                 android:textSize="12sp"/>
         </LinearLayout>
 
