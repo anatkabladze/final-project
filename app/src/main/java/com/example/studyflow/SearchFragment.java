@@ -69,6 +69,7 @@ public class SearchFragment  extends Fragment {
             tvHeaderTasks.setVisibility(View.GONE);
             return;
         }
+
         List<LectureItem> foundLectures = db.searchLectures(query);
         if (!foundLectures.isEmpty()) {
             lectureAdapter = new LectureAdapter(foundLectures, true);            rvLectures.setAdapter(lectureAdapter);

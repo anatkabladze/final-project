@@ -293,7 +293,17 @@ public class AddEditTaskFragment extends Fragment {
         long notificationTime = -1;
         if (days > 0 || hours > 0 || minutes > 0) {
             long offset = (days * 24 * 3600000L) + (hours * 3600000L) + (minutes * 60000L);
-            notificationTime = selectedDeadline.getTimeInMillis() - offset;
+            long calculatedNotifTime = selectedDeadline.getTimeInMillis() - offset;
+
+            if (calculatedNotifTime > System.currentTimeMillis()) {
+                notificationTime = calculatedNotifTime;
+            } else {
+                etNotifDays.setText("");
+                etNotifHours.setText("");
+                etNotifMinutes.setText("");
+                notificationTime = -1;
+                Toast.makeText(getContext(), "შეხსენების დრო წარსულია და გასუფთავდა!", Toast.LENGTH_SHORT).show();
+            }
         }
 
         if (taskId == -1) {
@@ -308,13 +318,20 @@ public class AddEditTaskFragment extends Fragment {
             success = db.updateTask(task) > 0;
         }
 
-        if (success) {
-            if (notificationTime > System.currentTimeMillis()) {
-                int idForAlarm = (taskId == -1) ? (int) System.currentTimeMillis() : taskId;
 
-                scheduleNotification(idForAlarm, "შეხსენება: " + title, "დედლაინი ახლოვდება!", notificationTime);
+        if (success) {
+            if (notificationTime > 0) {
+                if (notificationTime > System.currentTimeMillis()) {
+                    int idForAlarm = (taskId == -1) ? (int) System.currentTimeMillis() : taskId;
+                    scheduleNotification(idForAlarm, "შეხსენება: " + title, "დედლაინი ახლოვდება!", notificationTime);
+                    Toast.makeText(getContext(), "შენახულია და შეხსენება დაინიშნა", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "დავალება შენახულია, მაგრამ შეხსენების დრო წარსულია!", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(getContext(), "შენახულია", Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(getContext(), "შენახულია", Toast.LENGTH_SHORT).show();
+
             getParentFragmentManager().popBackStack();
         } else {
             Toast.makeText(getContext(), "შეცდომა!", Toast.LENGTH_SHORT).show();

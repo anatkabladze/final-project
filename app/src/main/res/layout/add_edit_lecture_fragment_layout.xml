@@ -28,7 +28,7 @@
                 android:layout_height="40dp"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="უკან"/>
+                />
 
             <TextView
                 android:id="@+id/tv_title_lecture"

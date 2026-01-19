@@ -16,7 +16,10 @@ import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity {
  LinearLayout btn_schedule, btn_search, btn_add, btn_tasks,btn_stats;
+    int activeColor = android.graphics.Color.parseColor("#E0E0E0"); // ღია ლურჯი
+    int inactiveColor = android.graphics.Color.TRANSPARENT;
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -31,11 +34,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         replaceFragment(new LecturesFragment());
+        setNavColor(btn_schedule);
 
         btn_schedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 replaceFragment(new LecturesFragment());
+                setNavColor(btn_schedule);
             }
         });
 
@@ -43,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                replaceFragment(new SearchFragment());
+                setNavColor(btn_search);
             }
         });
 
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             showAddDialog();
+                setNavColor(null);
             }
         });
 
@@ -57,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                replaceFragment(new TasksFragment());
+                setNavColor(btn_tasks);
             }
         });
 
@@ -65,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 replaceFragment(new StatisticsFragment());
+                setNavColor(btn_stats);
             }
         });
 
@@ -154,7 +163,16 @@ public class MainActivity extends AppCompatActivity {
     public void reloadSchedule() {
         replaceFragment(new LecturesFragment());
     }
+    private void setNavColor(LinearLayout selectedBtn) {
+        btn_schedule.setBackgroundColor(inactiveColor);
+        btn_search.setBackgroundColor(inactiveColor);
+        btn_tasks.setBackgroundColor(inactiveColor);
+        btn_stats.setBackgroundColor(inactiveColor);
 
+        if (selectedBtn != null) {
+            selectedBtn.setBackgroundColor(activeColor);
+        }
+    }
 
 
     @Override

@@ -81,7 +81,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
         holder.checkbox.setChecked(task.getIsCompleted() == 1);
 
 
-        updateTitleStyle(holder, task.getIsCompleted() == 1);
+
 
         holder.checkbox.setOnClickListener(v -> {
             int newStatus = holder.checkbox.isChecked() ? 1 : 0;
@@ -89,7 +89,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
 
             db.updateTaskStatus(task.getId(), newStatus);
 
-            updateTitleStyle(holder, newStatus == 1);
+
 
             if (statusListener != null) {
                 statusListener.onTaskStatusChanged();
@@ -107,15 +107,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
 
     }
 
-    private void updateTitleStyle(TaskViewHolder holder, boolean isCompleted) {
-        if (isCompleted) {
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.tvTitle.setTextColor(Color.GRAY);
-        } else {
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-            holder.tvTitle.setTextColor(Color.BLACK);
-        }
-    }
+
 
     @Override
     public int getItemCount() {

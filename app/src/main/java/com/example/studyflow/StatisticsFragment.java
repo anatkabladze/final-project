@@ -147,10 +147,10 @@ public class StatisticsFragment extends Fragment {
         data.setBarWidth(0.5f);
         barPriority.setData(data);
 
-        final String[] labels = new String[]{"High", "Medium", "Low"};
+        final String[] labels = new String[]{"მაღალი", "საშუალო", "დაბალი"};
         XAxis xAxis = barPriority.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
+        xAxis.setDrawGridLines(true);
         xAxis.setGranularity(1f);
 
         xAxis.setValueFormatter(new ValueFormatter() {

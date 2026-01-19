@@ -198,10 +198,37 @@
                 android:layout_margin="4dp"
                 app:cardCornerRadius="12dp"
                 app:cardBackgroundColor="#F8F9FA">
-                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="12dp" android:gravity="center">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="დროული" android:textSize="11sp"/>
-                    <TextView android:id="@+id/tv_on_time_count" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="20sp" android:textStyle="bold" android:textColor="#2196F3"/>
-                    <TextView android:id="@+id/tv_on_time_percent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0%" android:textSize="10sp" android:textColor="#2196F3"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="დროული"
+                        android:textSize="11sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_on_time_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#2196F3"/>
+
+                    <TextView
+                        android:id="@+id/tv_on_time_percent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0%"
+                        android:textSize="10sp"
+                        android:textColor="#2196F3"/>
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

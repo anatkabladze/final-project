@@ -28,7 +28,7 @@ public class AddEditLectureFragment extends Fragment {
     AutoCompleteTextView etDay;
     ArrayAdapter<String> dayAdapter;
     TextView tvTitlelecture;
-    // ედიტისტვის
+
     private int lectureId = -1;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -163,13 +163,14 @@ public class AddEditLectureFragment extends Fragment {
 
 
         DB db = new DB(requireContext());
+
         int dayOfWeekForDB = dayAdapter.getPosition(etDay.getText().toString()) + 1;
 
 
 
         int hours = getIntFromEt(etNotifHours);
         int minutes = getIntFromEt(etNotifMinutes);
-        long notificationOffset =  (hours * 3600000L) + (minutes * 60000L);
+        long notificationOffset =  (hours * 3600000L) + (minutes * 60000L);//წანაცვლება
 
         LectureItem lecture = new LectureItem(
                 lectureId,
@@ -190,6 +191,8 @@ public class AddEditLectureFragment extends Fragment {
             db.updateLecture(lecture);
             finalId = lectureId;
         }
+
+
         if (notificationOffset > 0) {
             scheduleLectureNotification((int)finalId, subject, start, dayOfWeekForDB, notificationOffset);
         }
@@ -211,7 +214,7 @@ public class AddEditLectureFragment extends Fragment {
         int targetAndroidDay = dayOfWeek + 1;
         if (targetAndroidDay > 7) targetAndroidDay = 1;
 
-
+// საათს ვაყენებტ სასურველ დროზე
             String[] parts = startTime.split(":");
             calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
             calendar.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
@@ -238,6 +241,7 @@ public class AddEditLectureFragment extends Fragment {
         intent.putExtra("title", "ლექცია: " + subject);
         intent.putExtra("message", "იწყება " + startTime + "-ზე");
         intent.putExtra("id", id + 1000);
+
 
         android.app.PendingIntent pendingIntent = android.app.PendingIntent.getBroadcast(
                 context, id + 1000, intent,
